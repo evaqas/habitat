@@ -1,0 +1,8 @@
+<footer class="site__footer">
+    <div class="container">
+        <div class="flex">
+            <p>{{ "&copy; %s" | format( date() | date('Y') ) }}</p>
+            {% include 'partials/menu.twig' with { menu: social_menu } %}
+        </div>
+    </div>
+</footer>

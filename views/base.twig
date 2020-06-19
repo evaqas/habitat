@@ -1,0 +1,13 @@
+{{ function('get_header') }}
+
+    <div class="site overflow-x-hidden">
+
+        {% include 'partials/site-header.twig' %}
+
+        <div class="site__body">{% block page %}{% endblock %}</div>
+
+        {% include 'partials/site-footer.twig' %}
+
+    </div>
+
+{{ function('get_footer') }}

@@ -1,0 +1,12 @@
+{% for link in links %}
+    <li class="{{ link.class }}">
+
+        <a href="{{ link.url | e('esc_url') }}"><span>{{ link.name }}</span></a>
+
+        {% if link.children %}
+            <ul>
+                {% include 'partials/menu-links.twig' with { links: link.children } %}
+            </ul>
+        {% endif %}
+    </li>
+{% endfor %}

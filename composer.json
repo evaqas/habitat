@@ -1,0 +1,21 @@
+{
+    "name": "evaqas/habitat",
+    "description": "WordPress starter theme",
+    "type": "wordpress-theme",
+    "authors": [
+        {
+            "name": "Evaldas Romaškis",
+            "email": "evaldas@paperplanes.lt"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "timber/timber": "^1.16",
+        "danielstjules/stringy": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Habitat\\": "includes"
+        }
+    }
+}
