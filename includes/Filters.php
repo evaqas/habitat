@@ -24,7 +24,7 @@ class Filters
             }
         }
 
-        $context['lang_menu']   = $this->getLanguagesMenu();
+        $context['lang_menu'] = $this->getLanguagesMenu();
 
         return $context;
     }
