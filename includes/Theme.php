@@ -11,9 +11,39 @@ class Theme
         add_action( 'after_setup_theme',  [ $theme, 'cleanup' ] );
         add_action( 'after_setup_theme',  [ $theme, 'setup' ] );
         add_action( 'after_setup_theme',  [ $theme, 'contentWidth' ], 0 );
+        add_action( 'wp_enqueue_scripts', [ $theme, 'enqueueScripts' ] );
+        add_action( 'wp_enqueue_scripts', [ $theme, 'enqueueStyles' ] );
 
         add_filter( 'acf/settings/default_language', [ $theme, 'acfDefaultLanguage' ] );
         add_filter( 'acf/settings/current_language', [ $theme, 'acfCurrentLanguage' ] );
+    }
+
+
+    public function enqueueScripts()
+    {
+        $entrypointsPath = get_theme_file_path('assets/dist/entrypoints.json');
+        $entrypoints = file_exists( $entrypointsPath ) ? json_decode( file_get_contents( $entrypointsPath ), true )['entrypoints'] : [];
+
+        foreach ( $entrypoints as $entry => $points ) {
+            $funcName = "is_{$entry}";
+            if ( $entry === 'main' ) {
+                foreach ( $points['js'] as $i => $jsPath ) {
+                    $handle = explode( '.', basename( $jsPath ) )[0];
+                    wp_enqueue_script( "habitat/{$handle}", get_theme_file_uri( $jsPath ), [], null, true );
+                }
+            } else if ( function_exists( $funcName ) && call_user_func( $funcName ) ) {
+                foreach ( $points['js'] as $i => $jsPath ) {
+                    $handle = explode( '.', basename( $jsPath ) )[0];
+                    wp_enqueue_script( "habitat/{$handle}", get_theme_file_uri( $jsPath ), [], null, true );
+                }
+            }
+        }
+    }
+
+
+    public function enqueueStyles()
+    {
+        wp_enqueue_style( 'habitat/main', asset('css/main.css'), [], null );
     }
 
 

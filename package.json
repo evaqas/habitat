@@ -1,0 +1,27 @@
+{
+  "name": "habitat",
+  "version": "1.0.0",
+  "repository": "https://github.com/evaqas/habitat.git",
+  "author": "Evaldas Romaškis <evaldasr@gmail.com>",
+  "private": true,
+  "scripts": {
+    "predev": "rm -rf assets/dist",
+    "dev": "encore dev --progress",
+    "prebuild": "rm -rf assets/dist",
+    "build": "NODE_ENV=production encore production --progress"
+  },
+  "dependencies": {
+    "tailwindcss": "^1.4.6"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.30.2",
+    "autoprefixer": "^9.8.0",
+    "node-sass": "^4.14.1",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^8.0.2"
+  },
+  "browserslist": [
+    "defaults",
+    "ie >= 10"
+  ]
+}
