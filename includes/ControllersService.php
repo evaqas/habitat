@@ -23,8 +23,6 @@ class ControllersService
         $controllerName = $this->getControllerClassFromTemplate( $template );
 
         if ( class_exists( $controllerName ) ) {
-            // $controller = new $controllerName();
-            // $controller->handle();
             $controllerName::init();
         }
 
