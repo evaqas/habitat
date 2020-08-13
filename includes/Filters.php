@@ -82,7 +82,7 @@ class Filters
         if ( is_category() || is_tag() || is_tax() ) {
             $title = single_term_title( '', false );
         } elseif ( is_author() ) {
-            $title = sprintf( __( 'Autoriaus %s įrašai:' ), '<span class="vcard">' . get_the_author() . '</span>' );
+            $title = sprintf( __( 'Autoriaus %s įrašai:', 'habitat' ), '<span class="vcard">' . get_the_author() . '</span>' );
         } elseif ( is_post_type_archive() ) {
             $title = post_type_archive_title( '', false );
         }
