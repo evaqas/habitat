@@ -13,9 +13,6 @@ class Theme
         add_action( 'after_setup_theme',  [ $theme, 'contentWidth' ], 0 );
         add_action( 'wp_enqueue_scripts', [ $theme, 'enqueueScripts' ] );
         add_action( 'wp_enqueue_scripts', [ $theme, 'enqueueStyles' ] );
-
-        add_filter( 'acf/settings/default_language', [ $theme, 'acfDefaultLanguage' ] );
-        add_filter( 'acf/settings/current_language', [ $theme, 'acfCurrentLanguage' ] );
     }
 
 
@@ -64,18 +61,6 @@ class Theme
     public function contentWidth()
     {
         $GLOBALS['content_width'] = apply_filters( 'habitat_content_width', 640 );
-    }
-
-
-    public function acfDefaultLanguage( $lang )
-    {
-        return function_exists('pll_default_language') ? pll_default_language() : $lang;
-    }
-
-
-    public function acfCurrentLanguage( $lang )
-    {
-        return function_exists('pll_current_language') ? pll_current_language() : $lang;
     }
 
 

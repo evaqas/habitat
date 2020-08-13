@@ -31,3 +31,9 @@ Filters::init();
  * Use template files as controllers
  */
 ControllersService::init();
+
+
+/**
+ * Acf filters and configuration
+ */
+Acf::init();
