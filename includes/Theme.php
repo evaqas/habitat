@@ -40,7 +40,7 @@ class Theme
 
     public function enqueueStyles()
     {
-        wp_enqueue_style( 'habitat/main', asset('css/main.css'), [], null );
+        wp_enqueue_style( 'habitat/main', asset_uri('css/main.css'), [], null );
     }
 
 
