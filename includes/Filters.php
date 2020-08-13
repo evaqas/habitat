@@ -15,9 +15,9 @@ class Filters
 
     public function addMenus( $context )
     {
-        $menus = [ 'main-menu', 'social-menu' ];
+        $menus = get_registered_nav_menus();
 
-        foreach ( $menus as $menu_slug ) {
+        foreach ( $menus as $menu_slug => $menu_title ) {
             if ( has_nav_menu( $menu_slug ) ) {
                 $menu = new \Timber\Menu( $menu_slug );
                 $context[ str_replace( '-', '_', $menu_slug ) ] = $this->formatMenuItems( $menu->items );
