@@ -1,9 +1,7 @@
 module.exports = {
     purge: [
         './assets/{js,vue}/**/*.{js,vue}',
-        './**/*.{php,twig}',
-        // '!node_modules',
-        // '!vendor{,/**}',
+        './!(node_modules|vendor)/**/*.{php,twig}',
     ],
     theme: {
         extend: {},
