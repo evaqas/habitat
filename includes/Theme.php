@@ -17,6 +17,8 @@ class Theme
 
     public function enqueueAssets()
     {
+        $needs_version = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
+
         $entrypointsPath = get_theme_file_path('assets/dist/entrypoints.json');
         $entrypoints = file_exists( $entrypointsPath ) ? json_decode( file_get_contents( $entrypointsPath ), true )['entrypoints'] : [];
 
@@ -26,17 +28,29 @@ class Theme
         ];
 
         foreach ( $entrypoints as $entry_name => $assets ) {
+
             list( $fn_name, $param_name ) = array_pad( explode( '-', $entry_name, 2 ), 2, null );
             $conditional_fn = "is_{$fn_name}";
 
             if ( $entry_name === 'main' || function_exists( $conditional_fn ) && call_user_func( $conditional_fn ) ) {
                 foreach ( $assets as $asset_type => $assets ) {
                     if ( isset( $enqueue_fns[ $asset_type ] ) ) {
+
                         $asset_fn = $enqueue_fns[ $asset_type ];
+
                         foreach ( $assets as $asset_path ) {
+
                             $handle = explode( '.', basename( $asset_path ) )[0];
-                            $params = [ "habitat/{$handle}", get_theme_file_uri( $asset_path ), [], null ];
+
+                            $params = [
+                                "habitat/{$handle}",
+                                get_theme_file_uri( $asset_path ),
+                                [],
+                                $needs_version ? filemtime( get_theme_file_path( $asset_path ) ) : null,
+                            ];
+
                             if ( $asset_type === 'js' ) $params[] = true;
+
                             call_user_func_array( $asset_fn, $params );
                         }
                     }
