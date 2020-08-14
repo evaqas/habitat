@@ -10,6 +10,17 @@ class Filters
 
         add_filter( 'get_the_archive_title', [ $self, 'alterArchiveTitle' ] );
         add_filter( 'timber/context',        [ $self, 'addMenus'] );
+        add_filter( 'timber/context',        [ $self, 'addAcfOptions'] );
+    }
+
+
+    public function addAcfOptions( $context )
+    {
+        if ( function_exists('get_fields') ) {
+            $context['options'] = get_fields('option');
+        }
+
+        return $context;
     }
 
 
