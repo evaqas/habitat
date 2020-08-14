@@ -6,7 +6,10 @@ const assetsHash = Encore.isProduction() ? '.[contenthash:8]' : ''
 const imagesHash = Encore.isProduction() ? '.[hash:8]' : ''
 
 const config = {
-    entryFile: './assets/js/main.js',
+    entries: [
+        './assets/js/main.js',
+        './assets/js/page.js',
+    ],
     assetsDir: 'assets/dist',
     publicPath: '',//`/app/themes/${project.name}`,
     distPath: 'dist',
@@ -25,9 +28,11 @@ if ( ! Encore.isRuntimeEnvironmentConfigured() ) {
     Encore.configureRuntimeEnvironment( process.env.NODE_ENV || 'dev' );
 }
 
+for ( const entryFile of config.entries ) {
+    Encore.addEntry( path.parse( entryFile ).name, entryFile )
+}
+
 Encore
-    .addEntry( path.parse( config.entryFile ).name, config.entryFile )
-    .addEntry( 'page', './assets/js/page.js' )
     .setOutputPath( config.assetsDir )
     .setPublicPath( `${config.publicPath}/${config.assetsDir}` )
     .enableVersioning( Encore.isProduction() )
