@@ -11,36 +11,38 @@ class Theme
         add_action( 'after_setup_theme',  [ $theme, 'cleanup' ] );
         add_action( 'after_setup_theme',  [ $theme, 'setup' ] );
         add_action( 'after_setup_theme',  [ $theme, 'contentWidth' ], 0 );
-        add_action( 'wp_enqueue_scripts', [ $theme, 'enqueueScripts' ] );
-        add_action( 'wp_enqueue_scripts', [ $theme, 'enqueueStyles' ] );
+        add_action( 'wp_enqueue_scripts', [ $theme, 'enqueueAssets' ] );
     }
 
 
-    public function enqueueScripts()
+    public function enqueueAssets()
     {
         $entrypointsPath = get_theme_file_path('assets/dist/entrypoints.json');
         $entrypoints = file_exists( $entrypointsPath ) ? json_decode( file_get_contents( $entrypointsPath ), true )['entrypoints'] : [];
 
-        foreach ( $entrypoints as $entry => $points ) {
-            $funcName = "is_{$entry}";
-            if ( $entry === 'main' ) {
-                foreach ( $points['js'] as $i => $jsPath ) {
-                    $handle = explode( '.', basename( $jsPath ) )[0];
-                    wp_enqueue_script( "habitat/{$handle}", get_theme_file_uri( $jsPath ), [], null, true );
-                }
-            } else if ( function_exists( $funcName ) && call_user_func( $funcName ) ) {
-                foreach ( $points['js'] as $i => $jsPath ) {
-                    $handle = explode( '.', basename( $jsPath ) )[0];
-                    wp_enqueue_script( "habitat/{$handle}", get_theme_file_uri( $jsPath ), [], null, true );
+        $enqueue_fns = [
+            'js'  => 'wp_enqueue_script',
+            'css' => 'wp_enqueue_style',
+        ];
+
+        foreach ( $entrypoints as $entry_name => $assets ) {
+            list( $fn_name, $param_name ) = array_pad( explode( '-', $entry_name, 2 ), 2, null );
+            $conditional_fn = "is_{$fn_name}";
+
+            if ( $entry_name === 'main' || function_exists( $conditional_fn ) && call_user_func( $conditional_fn ) ) {
+                foreach ( $assets as $asset_type => $assets ) {
+                    if ( isset( $enqueue_fns[ $asset_type ] ) ) {
+                        $asset_fn = $enqueue_fns[ $asset_type ];
+                        foreach ( $assets as $asset_path ) {
+                            $handle = explode( '.', basename( $asset_path ) )[0];
+                            $params = [ "habitat/{$handle}", get_theme_file_uri( $asset_path ), [], null ];
+                            if ( $asset_type === 'js' ) $params[] = true;
+                            call_user_func_array( $asset_fn, $params );
+                        }
+                    }
                 }
             }
         }
-    }
-
-
-    public function enqueueStyles()
-    {
-        wp_enqueue_style( 'habitat/main', asset_uri('css/main.css'), [], null );
     }
 
 
