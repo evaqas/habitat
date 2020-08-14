@@ -9,6 +9,10 @@ module.exports = {
                 inherit: 'inherit',
                 transparent: 'transparent',
             },
+            inset: {
+                '1/2': '50%',
+                full: '100%',
+            },
         },
         screens: {
             '-xs': { max: '424px' },
