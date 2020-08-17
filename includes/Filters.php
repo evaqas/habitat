@@ -9,8 +9,15 @@ class Filters
         $self = new self();
 
         add_filter( 'get_the_archive_title', [ $self, 'alterArchiveTitle' ] );
+        add_filter( 'timber/twig',           [ $self, 'addToTwig' ] );
         add_filter( 'timber/context',        [ $self, 'addMenus'] );
         add_filter( 'timber/context',        [ $self, 'addAcfOptions'] );
+    }
+
+
+    public function addToTwig( $twig ) {
+        $twig->addFunction( new \Timber\Twig_Function( 'asset', 'Habitat\\asset_uri' ) );
+        return $twig;
     }
 
 
