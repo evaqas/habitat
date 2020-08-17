@@ -19,8 +19,8 @@ class Theme
     {
         $needs_version = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
 
-        $entrypointsPath = get_theme_file_path('assets/dist/entrypoints.json');
-        $entrypoints = file_exists( $entrypointsPath ) ? json_decode( file_get_contents( $entrypointsPath ), true )['entrypoints'] : [];
+        $entrypoints_path = get_theme_file_path( DIST_PATH . 'entrypoints.json' );
+        $entrypoints = file_exists( $entrypoints_path ) ? json_decode( file_get_contents( $entrypoints_path ), true )['entrypoints'] : [];
 
         $enqueue_fns = [
             'js'  => 'wp_enqueue_script',
@@ -44,9 +44,9 @@ class Theme
 
                             $params = [
                                 "habitat/{$handle}",
-                                get_theme_file_uri( $asset_path ),
+                                asset_uri( $asset_path ),
                                 [],
-                                $needs_version ? filemtime( get_theme_file_path( $asset_path ) ) : null,
+                                $needs_version ? filemtime( asset_path( $asset_path ) ) : null,
                             ];
 
                             if ( $asset_type === 'js' ) $params[] = true;
