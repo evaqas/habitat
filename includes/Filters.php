@@ -17,6 +17,10 @@ class Filters
 
     public function addToTwig( $twig ) {
         $twig->addFunction( new \Timber\Twig_Function( 'asset', 'Habitat\\asset_uri' ) );
+        $twig->addFunction( new \Timber\Twig_Function( 'get_template_part', function ( $template, array $args = [] ) {
+            array_unshift( $args, $template, null );
+            call_user_func_array( 'get_template_part', $args );
+        }, [ 'is_variadic' => true ] ) );
         return $twig;
     }
 
