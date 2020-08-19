@@ -1,31 +1,32 @@
-const path    = require('path')
-const project = require('./package.json')
-const Encore  = require('@symfony/webpack-encore')
+const path              = require('path')
+const project           = require('./package.json')
+const Encore            = require('@symfony/webpack-encore')
+const svgToMiniDataURI  = require('mini-svg-data-uri')
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 
-const assetsHash = Encore.isProduction() ? '.[contenthash:8]' : ''
-const imagesHash = Encore.isProduction() ? '.[hash:8]' : ''
+if ( ! Encore.isRuntimeEnvironmentConfigured() ) {
+    Encore.configureRuntimeEnvironment( process.env.NODE_ENV || 'dev' );
+}
+
+const contentHash = Encore.isProduction() ? '.[contenthash:8]' : ''
+const buildHash   = Encore.isProduction() ? '.[hash:8]' : ''
 
 const config = {
-    entries: [
-        './assets/js/main.js',
-        './assets/js/page.js',
-    ],
-    assetsDir: 'assets/dist',
-    publicPath: '',//`/app/themes/${project.name}`,
-    distPath: 'dist',
+    entries: [ './assets/js/main.js' ],
+    assetsPath: 'assets',
+    distPath: 'assets/dist',
+    publicPath: `/app/themes/${project.name}`,
     names: {
-        js: `js/[name]${assetsHash}.js`,
-        css: `css/[name]${assetsHash}.css`,
-        images: `[path][name]${imagesHash}.[ext]`,
+        js: `js/[name]${contentHash}.js`,
+        css: `css/[name]${contentHash}.css`,
+        images: `images/[name]${buildHash}.[ext]`,
         // vendors: 'vendors',
     },
     copyFolders: [ 'images', 'svg' ],
     enableVue: false,
     showStats: true,
-}
-
-if ( ! Encore.isRuntimeEnvironmentConfigured() ) {
-    Encore.configureRuntimeEnvironment( process.env.NODE_ENV || 'dev' );
+    host: project.name + '.local',
+    certsPath: '/Users/evaldas/Library/Application Support/Local/run/router/nginx/certs/',
 }
 
 for ( const entryFile of config.entries ) {
@@ -33,8 +34,8 @@ for ( const entryFile of config.entries ) {
 }
 
 Encore
-    .setOutputPath( config.assetsDir )
-    .setPublicPath( `${config.publicPath}/${config.assetsDir}` )
+    .setOutputPath( config.distPath )
+    .setPublicPath( `${config.publicPath}/${config.distPath}` )
     .enableVersioning( Encore.isProduction() )
     .configureFilenames( config.names )
     .setManifestKeyPrefix('')
@@ -74,6 +75,38 @@ Encore
     } )
     .enableSassLoader()
     .enablePostCssLoader()
+    .copyFiles(
+        config.copyFolders.map( folderName => ({
+            from: `${config.assetsPath}/${folderName}`,
+            to: `${folderName}/[path][name]${buildHash}.[ext]`,
+        }) )
+    )
+    .configureUrlLoader({
+        images: {
+            limit: 1024 * 4,
+            generator: (content, mimetype, encoding, resourcePath) => {
+                return /\.svg$/i.test( resourcePath )
+                    ? svgToMiniDataURI( content.toString() )
+                    : `data:${mimetype}${encoding ? `;${encoding}` : ''},${content.toString( encoding )}`
+            },
+        },
+    })
+    .configureDevServerOptions( options => {
+        options.contentBase = path.resolve( __dirname, './' ), // absolute path
+        options.publicPath = `${config.publicPath}/${config.distPath}` // webpack assets path
+        options.writeToDisk = true
+    } )
+    .addPlugin( new BrowserSyncPlugin({
+        // host: host,
+        proxy: 'https://' + config.host,
+        https: {
+            key : config.certsPath + config.host + '.key',
+            cert: config.certsPath + config.host + '.crt',
+        },
+        open: false,
+        files: [ '**/*.{php,twig,jpg,png,svg}' ],
+        ignore: [ 'node_modules', 'vendor' ],
+    }) )
 
 const webPackConfig = Encore.getWebpackConfig()
 

@@ -17,9 +17,13 @@
   "devDependencies": {
     "@symfony/webpack-encore": "^0.30.2",
     "autoprefixer": "^9.8.0",
+    "browser-sync": "^2.26.12",
+    "browser-sync-webpack-plugin": "^2.2.2",
+    "mini-svg-data-uri": "^1.2.3",
     "node-sass": "^4.14.1",
     "postcss-loader": "^3.0.0",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^8.0.2",
+    "url-loader": "^4.1.0"
   },
   "browserslist": [
     "defaults",
