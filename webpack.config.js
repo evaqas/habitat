@@ -20,7 +20,6 @@ const config = {
         js: `js/[name]${contentHash}.js`,
         css: `css/[name]${contentHash}.css`,
         images: `images/[name]${buildHash}.[ext]`,
-        // vendors: 'vendors',
     },
     copyFolders: [ 'images', 'svg' ],
     enableVue: false,
@@ -107,6 +106,10 @@ Encore
         files: [ '**/*.{php,twig,jpg,png,svg}' ],
         ignore: [ 'node_modules', 'vendor' ],
     }) )
+
+if ( config.enableVue ) {
+    Encore.enableVueLoader()
+}
 
 const webPackConfig = Encore.getWebpackConfig()
 
