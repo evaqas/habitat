@@ -89,6 +89,7 @@ class Controller
 
         $methods = array_filter( $class->getMethods( \ReflectionMethod::IS_PUBLIC ), function ( $method ) {
             return $method->name !== '__construct'
+                && $method->name !== '__get'
                 && $method->name !== 'view';
         } );
 
