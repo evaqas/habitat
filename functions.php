@@ -36,7 +36,7 @@ Filters::init();
 /**
  * Use template files as controllers
  */
-ControllersService::init();
+ControllerService::init();
 
 
 /**

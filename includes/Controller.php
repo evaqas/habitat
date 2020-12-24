@@ -3,40 +3,45 @@
 namespace Habitat;
 
 use Timber\Timber;
+use Brain\Hierarchy\Hierarchy;
 
 class Controller
 {
     protected $context = [];
 
 
+    public function __get( $name )
+    {
+        return isset( $this->context[ $name ] ) ? $this->context[ $name ] : null;
+    }
+
+
     public function __construct()
     {
         $this->context = Timber::get_context();
-        $this->context['page_title'] = $this->getPageTitle();
-
-        if ( is_home() || is_archive() ) {
-            $this->context['posts'] = Timber::get_posts();
-            $this->context['pagination'] = Timber::get_pagination(4);
-        } else if ( is_singular() ) {
-            $this->context['post'] = Timber::get_post();
-        }
+        $this->setContextFromMethods();
     }
 
 
-    public static function init()
+    public function pagination()
     {
-        $self = new self();
-        $self->handle();
+        return is_home() || is_archive() ? Timber::get_pagination(4) : null;
     }
 
 
-    public function handle()
+    public function posts()
     {
-        Timber::render( $this->getTemplates(), $this->context );
+        return is_home() || is_archive() ? Timber::get_posts() : null;
     }
 
 
-    public function getPageTitle()
+    public function post()
+    {
+        return is_singular() ? Timber::get_post() : null;
+    }
+
+
+    public function page_title()
     {
         if ( is_singular() ) {
             return get_the_title();
@@ -50,76 +55,47 @@ class Controller
     }
 
 
-    public function getTemplates()
+    public function view()
     {
-        $templates = [ 'index.php.twig' ];
+        Timber::render( $this->getTemplates(), $this->getContext() );
+    }
 
-        if ( is_404() ) {
-            array_unshift( $templates, '404.php.twig' );
-        } if ( is_search() ) {
-            array_unshift( $templates, 'search.php.twig' );
-        } else if ( is_singular() ) {
-            array_unshift( $templates, 'singular.php.twig' );
 
-            if ( is_attachment() ) {
-                array_unshift( $templates, 'attachment.php.twig' );
-            } else if ( is_page() ) {
-                array_unshift(
-                    $templates,
-                    sprintf( 'page-%s.php.twig', get_queried_object()->post_name ),
-                    sprintf( 'page-%s.php.twig', get_queried_object()->ID ),
-                    'page.php.twig'
-                );
-            } else if ( is_single() ) {
-                array_unshift(
-                    $templates,
-                    sprintf( 'single-%s-%s.php.twig', get_queried_object()->post_type, get_queried_object()->post_name ),
-                    sprintf( 'single-%s.php.twig', get_queried_object()->post_type ),
-                    'single.php.twig'
-                );
-            }
+    protected function getTemplates()
+    {
+        global $wp_query;
 
-            if ( is_page_template() ) {
-                array_unshift( $templates , basename( get_page_template() ) . '.twig' );
-            }
-        } else if ( is_archive() ) {
-            array_unshift( $templates, 'archive.php.twig' );
+        $hierarchy = new Hierarchy();
 
-            if ( is_category() ) {
-                array_unshift(
-                    $templates,
-                    sprintf( 'category-%s.php.twig', get_queried_object()->slug ),
-                    sprintf( 'category-%s.php.twig', get_queried_object()->term_id ),
-                    'category.php.twig'
-                );
-            } else if ( is_tag() ) {
-                array_unshift(
-                    $templates,
-                    sprintf( 'tag-%s.php.twig', get_queried_object()->slug ),
-                    sprintf( 'tag-%s.php.twig', get_queried_object()->term_id ),
-                    'tag.php.twig'
-                );
-            } else if ( is_tax() ) {
-                array_unshift(
-                    $templates,
-                    sprintf( 'taxonomy-%s-%s.php.twig', get_queried_object()->taxonomy, get_queried_object()->slug ),
-                    sprintf( 'taxonomy-%s.php.twig', get_queried_object()->taxonomy ),
-                    'taxonomy.php.twig'
-                );
-            } else if ( is_post_type_archive() ) {
-                array_unshift( $templates, 'archive-' . get_post_type() . '.php.twig' );
-            } else if ( is_author() ) {
-                array_unshift(
-                    $templates,
-                    sprintf( 'author-%s.php.twig', get_queried_object()->user_nicename ),
-                    sprintf( 'author-%s.php.twig', get_queried_object()->ID ),
-                    'author.php.twig'
-                );
-            } else if ( is_date() ) {
-                array_unshift( $templates, 'date.php.twig' );
-            }
-        }
+        $templates = array_map( function ( $filename ) {
+            return basename( $filename, '.php' ) . '.php.twig';
+        }, $hierarchy->getTemplates( $wp_query ) );
 
         return $templates;
+    }
+
+
+    protected function getContext()
+    {
+        return array_filter( $this->context, function ( $property ) {
+            return ! is_null( $property );
+        } );
+    }
+
+
+    protected function setContextFromMethods()
+    {
+        $class = new \ReflectionClass( $this );
+
+        $methods = array_filter( $class->getMethods( \ReflectionMethod::IS_PUBLIC ), function ( $method ) {
+            return $method->name !== '__construct'
+                && $method->name !== 'view';
+        } );
+
+        $methods = array_reverse( $methods );
+
+        foreach ( $methods as $method ) {
+            $this->context[ $method->name ] = $this->{$method->name}();
+        }
     }
 }

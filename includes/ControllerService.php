@@ -4,17 +4,17 @@ namespace Habitat;
 
 use Stringy\Stringy;
 
-class ControllersService
+class ControllerService
 {
     public static function init()
     {
         $self = new self();
 
-        add_filter( 'template_include', [ $self, 'handleTemplateInclude' ] );
+        add_filter( 'template_include', [ $self, 'runTemplateController' ] );
     }
 
 
-    public function handleTemplateInclude( $template )
+    public function runTemplateController( $template )
     {
         if ( $template ) {
             include $template;
@@ -23,7 +23,8 @@ class ControllersService
         $controllerName = $this->getControllerClassFromTemplate( $template );
 
         if ( class_exists( $controllerName ) ) {
-            $controllerName::init();
+            $controller = new $controllerName();
+            $controller->view();
         }
 
         return;
