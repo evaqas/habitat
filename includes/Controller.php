@@ -69,7 +69,7 @@ class Controller
 
         $templates = array_map( function ( $filename ) {
             return basename( $filename, '.php' ) . '.php.twig';
-        }, $hierarchy->getTemplates( $wp_query ) );
+        }, $hierarchy->templates( $wp_query ) );
 
         return $templates;
     }

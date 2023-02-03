@@ -9,14 +9,19 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
-        "timber/timber": "^1.16",
-        "danielstjules/stringy": "^3.1",
-        "brain/hierarchy": "^2.5"
+        "php": ">=7.4",
+        "timber/timber": "2.0.0-beta.1",
+        "brain/hierarchy": "^3.2",
+        "voku/stringy": "~6.0"
     },
     "autoload": {
         "psr-4": {
             "Habitat\\": "includes"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
         }
     }
 }

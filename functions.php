@@ -18,13 +18,19 @@ require_once get_theme_file_path('includes/functions.php');
 /**
  * Initialize Timber library
  */
-$timber = new \Timber\Timber();
+\Timber\Timber::init();
 
 
 /**
  * Initialize theme
  */
 Theme::init();
+
+
+/**
+ * Timber context and configuration
+ */
+Timber::setup();
 
 
 /**
