@@ -11,7 +11,7 @@ define( 'DIST_PATH', '/assets/dist/' );
 /**
  * Load dependencies
  */
-require_once __DIR__ . '/vendor/autoload.php';
+require_once get_theme_file_path('vendor/autoload.php');
 require_once get_theme_file_path('includes/functions.php');
 
 
