@@ -1,7 +1,6 @@
 const path              = require('path')
 const project           = require('./package.json')
 const Encore            = require('@symfony/webpack-encore')
-const svgToMiniDataURI  = require('mini-svg-data-uri')
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 
 if ( ! Encore.isRuntimeEnvironmentConfigured() ) {
@@ -14,14 +13,13 @@ const buildHash   = Encore.isProduction() ? '.[hash:8]' : ''
 const config = {
     entries: [ './assets/js/main.js' ],
     assetsPath: 'assets',
-    distPath: 'assets/dist',
-    publicPath: `/app/themes/${project.name}`,
+    distPath: 'dist',
+    publicPath: `/wp-content/themes/${project.name}`,
     names: {
         js: `js/[name]${contentHash}.js`,
         css: `css/[name]${contentHash}.css`,
-        images: `images/[name]${buildHash}.[ext]`,
     },
-    copyFolders: [ 'images', 'svg' ],
+    copyFolders: [ 'fonts', 'images', 'svg' ],
     enableVue: false,
     showStats: true,
     host: project.name + '.local',
@@ -80,16 +78,6 @@ Encore
             to: `${folderName}/[path][name]${buildHash}.[ext]`,
         }) )
     )
-    .configureUrlLoader({
-        images: {
-            limit: 1024 * 4,
-            generator: (content, mimetype, encoding, resourcePath) => {
-                return /\.svg$/i.test( resourcePath )
-                    ? svgToMiniDataURI( content.toString() )
-                    : `data:${mimetype}${encoding ? `;${encoding}` : ''},${content.toString( encoding )}`
-            },
-        },
-    })
     .configureDevServerOptions( options => {
         options.contentBase = path.resolve( __dirname, './' ), // absolute path
         options.publicPath = `${config.publicPath}/${config.distPath}` // webpack assets path

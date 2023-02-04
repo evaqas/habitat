@@ -5,30 +5,31 @@
   "author": "Evaldas Romaškis <evaldasr@gmail.com>",
   "private": true,
   "scripts": {
-    "predev": "rm -rf assets/dist",
-    "dev": "encore dev --progress",
-    "prebuild": "rm -rf assets/dist",
+    "predev": "rm -rf dist",
+    "dev": "encore dev --progress --watch",
+    "prebuild": "rm -rf dist",
     "build": "NODE_ENV=production encore production --progress"
   },
   "dependencies": {
-    "alpinejs": "^2.5.0",
-    "tailwindcss": "^1.4.6"
+    "alpinejs": "^3.11.1"
   },
   "devDependencies": {
-    "@symfony/webpack-encore": "^0.30.2",
-    "autoprefixer": "^9.8.0",
-    "browser-sync": "^2.26.12",
-    "browser-sync-webpack-plugin": "^2.2.2",
-    "mini-svg-data-uri": "^1.2.3",
-    "node-sass": "^4.14.1",
-    "postcss-loader": "^3.0.0",
-    "sass-loader": "^8.0.2",
-    "url-loader": "^4.1.0",
-    "vue-loader": "^15.9.3",
-    "vue-template-compiler": "^2.6.11"
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@symfony/webpack-encore": "^4.2.0",
+    "autoprefixer": "^10.4.13",
+    "browser-sync": "^2.27.11",
+    "browser-sync-webpack-plugin": "^2.3.0",
+    "file-loader": "^6.2.0",
+    "postcss": "^8.4.21",
+    "postcss-loader": "^7.0.2",
+    "sass": "^1.58.0",
+    "sass-loader": "^13.2.0",
+    "tailwindcss": "^3.2.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   },
   "browserslist": [
-    "defaults",
-    "ie >= 10"
+    "defaults"
   ]
 }

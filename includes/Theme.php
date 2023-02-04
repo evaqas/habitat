@@ -19,7 +19,7 @@ class Theme
     {
         $needs_version = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG;
 
-        $entrypoints_path = get_theme_file_path( DIST_PATH . 'entrypoints.json' );
+        $entrypoints_path = get_theme_file_path( DIST_PATH . '/entrypoints.json' );
         $entrypoints = file_exists( $entrypoints_path ) ? json_decode( file_get_contents( $entrypoints_path ), true )['entrypoints'] : [];
 
         $enqueue_fns = [

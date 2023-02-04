@@ -6,7 +6,8 @@ namespace Habitat;
 /**
  * Project constants
  */
-define( 'DIST_PATH', '/assets/dist/' );
+define( 'DIST_PATH', '/dist' );
+
 
 /**
  * Load dependencies
