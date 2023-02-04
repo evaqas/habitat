@@ -53,7 +53,6 @@ Encore
             return manifest
         }, seed )
     })
-    .enableSingleRuntimeChunk()
     .splitEntryChunks()
     .configureSplitChunks( splitChunks => {
         splitChunks.minSize = 1024 * 30
@@ -94,6 +93,12 @@ Encore
         files: [ '**/*.{php,twig,jpg,png,svg}' ],
         ignore: [ 'node_modules', 'vendor' ],
     }) )
+
+if ( config.entries.length >= 2 ) {
+    Encore.enableSingleRuntimeChunk()
+} else [
+    Encore.disableSingleRuntimeChunk()
+]
 
 if ( config.enableVue ) {
     Encore.enableVueLoader()
