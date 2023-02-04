@@ -6,7 +6,7 @@
                 <img src="" alt="{{ site.name | e('html_attr') }}">
             </a>
 
-            {% include 'partials/menu.twig' with { menu: main_menu } %}
+            {% include 'partials/menu.twig' with { menu: main_menu, class: 'flex' } %}
 
             <button x-on:click.stop="toggleOffcanvas">
                 {% embed "partials/sprite.twig" %}

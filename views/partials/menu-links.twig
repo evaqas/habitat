@@ -1,12 +1,12 @@
-{% for link in links %}
-    <li class="{{ link.class }}">
-
-        <a href="{{ link.url | e('esc_url') }}"><span>{{ link.name }}</span></a>
-
-        {% if link.children %}
-            <ul>
-                {% include 'partials/menu-links.twig' with { links: link.children } %}
-            </ul>
-        {% endif %}
+{% for item in links %}
+    {% set link = item.link %}
+    <li class="{{ [ item.class, itemClass ] | classname | e('html_attr') }}">
+        <a class="{{ [ link.class, linkClass ] | classname | e('html_attr') }}" href="{{ link.url | e('esc_url') }}"{{ link.target ? ' target="%s"' | format( link.target | e('html_attr') ) }}><span>{{ link.name }}</span></a>
+        {% include "partials/menu.twig" with {
+            menu: item.children,
+            class: childClass,
+            itemClass: childItemClass,
+            linkClass: childLinkClass,
+        } %}
     </li>
 {% endfor %}

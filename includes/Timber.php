@@ -52,9 +52,9 @@ class Timber
         $menus = get_registered_nav_menus();
 
         foreach ( $menus as $menu_slug => $menu_title ) {
+            if ( ! has_nav_menu( $menu_slug ) ) continue;
             $menu = \Timber::get_menu( $menu_slug );
-            if ( ! $menu ) continue;
-            $context[ str_replace( '-', '_', $menu_slug ) ] = $this->formatMenuItems( $menu->items );
+            $context[ str_replace( '-', '_', $menu_slug ) ] = $this->formatMenuItems( $menu->items, $menu_slug );
         }
 
         $context['lang_menu'] = $this->getLanguagesMenu();
@@ -63,25 +63,36 @@ class Timber
     }
 
 
-    public function formatMenuItems( $items )
+    public function formatMenuItems( $items, $menu_slug )
     {
-        if ( ! is_array( $items ) ) return false;
+        if ( ! is_array( $items ) || empty( $items ) ) return false;
 
-        return array_map( function ( $item ) {
+        return array_map( function ( $item ) use ( $menu_slug ) {
 
-            $class = [];
+            $item_classes = [];
+
+            $parsed_url = parse_url( $item->url );
+            $item->current = $item->current && empty( $parsed_url['fragment'] );
 
             if ( $item->current )               $class[] = 'is-current';
             if ( $item->current_item_parent )   $class[] = 'is-parent';
             if ( $item->current_item_ancestor ) $class[] = 'is-ancestor';
             if ( $item->has_child_class )       $class[] = 'has-children';
 
+            $item_classes = apply_filters( 'habitat/menu_item_classes', $item_classes, $item, $menu_slug );
+            $link_classes = apply_filters( 'habitat/menu_link_classes', [], $item, $menu_slug );
+
             return [
                 'ID'       => $item->object_id,
-                'name'     => $item->name,
-                'url'      => $item->url,
-                'class'    => implode( ' ', $class ),
-                'children' => $this->formatMenuItems( $item->children ),
+                'class'    => implode( ' ', $item_classes ),
+                'children' => $this->formatMenuItems( $item->children, $menu_slug ),
+                'current'  => (bool) $item->current,
+                'link'     => [
+                    'name'   => $item->name,
+                    'url'    => $item->url,
+                    'class'  => implode( ' ', $link_classes ),
+                    'target' => $item->target === '_blank' ? '_blank' : '',
+                ],
             ];
         }, $items );
     }
@@ -90,22 +101,20 @@ class Timber
     public function getLanguagesMenu()
     {
         if ( ! function_exists( 'pll_the_languages' ) ) {
-            return [];
+            return null;
         }
 
-        $langs = array_values( pll_the_languages( [ 'raw' => 1 ] ) );
+        $langs = pll_the_languages( [ 'raw' => 1 ] );
 
-        $current_lang = array_filter( $langs, function ( $lang ) {
-            return $lang['current_lang'];
-        } );
-        $current_lang = array_shift( $current_lang );
-
-        $sub_langs = array_filter( $langs, function ( $lang ) {
-            return ! $lang['current_lang'];
-        } );
-
-        $current_lang['children'] = array_values( $sub_langs );
-
-        return $current_lang;
+        return array_map( function ( $lang ) {
+            return [
+                'ID'   => $lang['id'],
+                'link' => [
+                    'name'  => strtoupper( $lang['slug'] ),
+                    'url'   => $lang['url'],
+                    'class' => $lang['current_lang'] ? 'is-current' : '',
+                ],
+            ];
+        }, array_values( $langs ) );
     }
 }
