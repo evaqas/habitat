@@ -1,0 +1,14 @@
+<div class="offcanvas bg-gray-100" x-bind="offcanvasEvents">
+    <div class="h-full overflow-y-auto">
+        <div class="flex">
+            <strong>Offcanvas</strong>
+            <button x-on:click="closeOffcanvas">
+                {% embed "partials/sprite.twig" %}
+                    {% block sprite %}
+                        <use href="{{ asset('svg/sprite.svg') }}#close"></use>
+                    {% endblock %}
+                {% endembed %}
+            </button>
+        </div>
+    </div>
+</div>

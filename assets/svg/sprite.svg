@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <symbol id="hamburger" viewBox="0 0 30 30">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 5.19995H30V6.39995H0V5.19995ZM0 14.4H30V15.6H0V14.4ZM30 23.6H0V24.7999H30V23.6Z"/>
+        </symbol>
+        <symbol id="close" viewBox="0 0 30 30">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M15 14.154L4.846 4L4 4.846L14.154 15L4 25.154L4.846 26L15 15.846L25.154 26L26 25.154L15.846 15L26 4.846L25.154 4L15 14.154Z"/>
+        </symbol>
+    </defs>
+</svg>

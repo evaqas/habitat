@@ -1,0 +1,65 @@
+.site {
+    --offcanvas-width: 300px;
+    --offcanvas-duration : 250ms;
+    @apply relative;
+
+    &.-active {
+        overflow-y: hidden;
+    }
+
+    &.slide {
+        &::before {
+            @apply block fixed inset-0 bg-black bg-opacity-30 opacity-0 invisible ease-out;
+            content: "";
+            transition-property: opacity, visibility;
+            transition-duration: var(--offcanvas-duration);
+        }
+
+        &.-active::before {
+            @apply opacity-100 visible;
+        }
+    }
+}
+
+.offcanvas {
+    @apply absolute;
+
+    .site:not(.overlay) & {
+        @apply inset-y-0 right-0;
+        width: var(--offcanvas-width);
+    }
+
+    .slide &,
+    .push & {
+        @apply translate-x-full transition-transform ease-out;
+        transition-duration: var(--offcanvas-duration);
+    }
+
+    .slide.-active &,
+    .push.-active & {
+        @apply translate-x-0;
+    }
+
+    .overlay & {
+        @apply inset-0 scale-90 opacity-25 invisible ease-out;
+        transition-property: transform, opacity, visibility;
+        transition-duration: var(--offcanvas-duration);
+    }
+
+    .overlay.-active & {
+        @apply scale-100 opacity-100 visible;
+    }
+}
+
+.canvas {
+    .push &,
+    .reveal & {
+        @apply relative transition-transform ease-out;
+        transition-duration: var(--offcanvas-duration);
+    }
+
+    .push.-active &,
+    .reveal.-active & {
+        transform: translate3d(calc(var(--offcanvas-width) * -1), 0, 0);
+    }
+}

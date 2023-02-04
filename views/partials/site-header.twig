@@ -1,10 +1,21 @@
 <header class="site__header">
     <div class="container">
         <div class="flex">
+
             <a href="{{ site.url | e('esc_url') }}">
                 <img src="" alt="{{ site.name | e('html_attr') }}">
             </a>
+
             {% include 'partials/menu.twig' with { menu: main_menu } %}
+
+            <button x-on:click.stop="toggleOffcanvas">
+                {% embed "partials/sprite.twig" %}
+                    {% block sprite %}
+                        <use x-bind:href="hamburgerIcon"></use>
+                    {% endblock %}
+                {% endembed %}
+            </button>
+
         </div>
     </div>
 </header>
