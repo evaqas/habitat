@@ -9,8 +9,19 @@ class Timber
         $self = new self();
 
         add_filter( 'timber/twig/functions', [ $self, 'addTwigFunctions' ] );
+        add_filter( 'timber/twig/filters',   [ $self, 'addTwigFilters' ] );
         add_filter( 'timber/context',        [ $self, 'addMenus'] );
         add_filter( 'timber/context',        [ $self, 'addAcfOptions'] );
+    }
+
+
+    public function addTwigFilters( $filters ) {
+        $filters['classname'] = [
+            'callable' => function ( array $classes ) {
+                return implode( ' ', array_filter( $classes ) );
+            },
+        ];
+        return $filters;
     }
 
 
