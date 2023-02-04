@@ -18,14 +18,8 @@ class Controller
 
     public function __construct()
     {
-        $this->context = Timber::get_context();
+        $this->context = Timber::context();
         $this->setContextFromMethods();
-    }
-
-
-    public function pagination()
-    {
-        return is_home() || is_archive() ? Timber::get_pagination(4) : null;
     }
 
 
