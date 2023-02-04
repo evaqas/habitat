@@ -1,12 +1,16 @@
 {{ function('get_header') }}
 
-    <div class="site overflow-x-hidden">
+    <div class="site slide h-full overflow-x-hidden" x-data="offcanvas('slide')" x-bind:class="{ '-active': offcanvasOpen }">
 
-        {% include 'partials/site-header.twig' %}
+        {% include "partials/offcanvas.twig" %}
 
-        <div class="site__body">{% block page %}{% endblock %}</div>
+        <div class="canvas bg-white" x-bind="canvasEvents">
+            {% include 'partials/site-header.twig' %}
 
-        {% include 'partials/site-footer.twig' %}
+            <div class="site__body">{% block page %}{% endblock %}</div>
+
+            {% include 'partials/site-footer.twig' %}
+        </div>
 
     </div>
 

@@ -6,11 +6,16 @@
 // generic
 @tailwind base;
 
+html, body {
+    @apply h-full;
+}
+
 // elements
 // objects
 
 // components
 @tailwind components;
+@import "components.offcanvas";
 
 // utilities
 @tailwind utilities;
