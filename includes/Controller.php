@@ -9,6 +9,8 @@ class Controller
 {
     protected $context = [];
 
+    protected $methods_to_exclude = [];
+
 
     public function __get( $name )
     {
@@ -18,6 +20,7 @@ class Controller
 
     public function __construct()
     {
+        $this->excludeMethods( [ '__construct', '__get', 'view' ] );
         $this->context = Timber::context();
         $this->setContextFromMethods();
     }
@@ -25,7 +28,7 @@ class Controller
 
     public function posts()
     {
-        return is_home() || is_archive() ? Timber::get_posts() : null;
+        return is_home() || is_archive() || is_search() ? Timber::get_posts() : null;
     }
 
 
@@ -45,6 +48,8 @@ class Controller
             return get_the_archive_title();
         } else if ( is_search() ) {
             return sprintf( esc_html__( 'Paieškos rezultatai pagal „%s“', 'habitat' ), '<span>' . get_search_query() . '</span>' );
+        } else if ( is_404() ) {
+            return __( 'Nerasta', 'artscape' );
         }
     }
 
@@ -82,9 +87,7 @@ class Controller
         $class = new \ReflectionClass( $this );
 
         $methods = array_filter( $class->getMethods( \ReflectionMethod::IS_PUBLIC ), function ( $method ) {
-            return $method->name !== '__construct'
-                && $method->name !== '__get'
-                && $method->name !== 'view';
+            return ! in_array( $method->name, $this->methods_to_exclude );
         } );
 
         $methods = array_reverse( $methods );
@@ -92,5 +95,11 @@ class Controller
         foreach ( $methods as $method ) {
             $this->context[ $method->name ] = $this->{$method->name}();
         }
+    }
+
+
+    protected function excludeMethods( array $methods = [] )
+    {
+        $this->methods_to_exclude = array_merge( $this->methods_to_exclude, $methods );
     }
 }
