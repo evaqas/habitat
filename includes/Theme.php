@@ -27,12 +27,14 @@ class Theme
             'css' => 'wp_enqueue_style',
         ];
 
+        $theme_slug = get_stylesheet();
+
         foreach ( $entrypoints as $entry_name => $assets ) {
 
             list( $fn_name, $param_name ) = array_pad( explode( '-', $entry_name, 2 ), 2, null );
             $conditional_fn = "is_{$fn_name}";
 
-            if ( $entry_name === 'main' || function_exists( $conditional_fn ) && call_user_func( $conditional_fn ) ) {
+            if ( $entry_name === 'main' || function_exists( $conditional_fn ) && call_user_func( $conditional_fn, $param_name ) ) {
                 foreach ( $assets as $asset_type => $assets ) {
                     if ( isset( $enqueue_fns[ $asset_type ] ) ) {
 
@@ -43,7 +45,7 @@ class Theme
                             $handle = explode( '.', basename( $asset_path ) )[0];
 
                             $params = [
-                                "habitat/{$handle}",
+                                "{$theme_slug}/{$handle}",
                                 asset_uri( $asset_path ),
                                 [],
                                 $needs_version ? filemtime( asset_path( $asset_path ) ) : null,
@@ -66,6 +68,7 @@ class Theme
 
         add_theme_support('title-tag');
         add_theme_support('post-thumbnails');
+        add_theme_support( 'html5', [ 'search-form', 'gallery', 'caption' ] );
 
         register_nav_menus( [
             'main-menu'   => esc_html__( 'Pagrindinis meniu', 'habitat' ),
@@ -76,7 +79,7 @@ class Theme
 
     public function contentWidth()
     {
-        $GLOBALS['content_width'] = apply_filters( 'habitat_content_width', 640 );
+        $GLOBALS['content_width'] = apply_filters( 'habitat/content_width', 640 );
     }
 
 
