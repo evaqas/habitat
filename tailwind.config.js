@@ -1,7 +1,8 @@
 module.exports = {
     content: [
         './assets/{js,vue,svg}/**/*.{js,vue,svg}',
-        './!(dist|node_modules|vendor)/**/*.{php,twig}',
+        './**/*.{php,twig}',
+        './!**(dist|node_modules|vendor)',
     ],
     theme: {
         extend: {},
