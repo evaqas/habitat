@@ -74,10 +74,10 @@ class Timber
             $parsed_url = parse_url( $item->url );
             $item->current = $item->current && empty( $parsed_url['fragment'] );
 
-            if ( $item->current )               $class[] = 'is-current';
-            if ( $item->current_item_parent )   $class[] = 'is-parent';
-            if ( $item->current_item_ancestor ) $class[] = 'is-ancestor';
-            if ( $item->has_child_class )       $class[] = 'has-children';
+            if ( $item->current )               $item_classes[] = 'is-current';
+            if ( $item->current_item_parent )   $item_classes[] = 'is-parent';
+            if ( $item->current_item_ancestor ) $item_classes[] = 'is-ancestor';
+            if ( $item->has_child_class )       $item_classes[] = 'has-children';
 
             $item_classes = apply_filters( 'habitat/menu_item_classes', $item_classes, $item, $menu_slug );
             $link_classes = apply_filters( 'habitat/menu_link_classes', [], $item, $menu_slug );
