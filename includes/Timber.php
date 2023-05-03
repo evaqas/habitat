@@ -15,24 +15,29 @@ class Timber
     }
 
 
-    public function addTwigFilters( $filters ) {
+    public function addTwigFilters( $filters )
+    {
         $filters['classname'] = [
             'callable' => function ( array $classes ) {
                 return implode( ' ', array_filter( $classes ) );
             },
         ];
+
         return $filters;
     }
 
 
-    public function addTwigFunctions( $functions ) {
+    public function addTwigFunctions( $functions )
+    {
         $functions['asset'] = [ 'callable' => '\Habitat\\asset_uri' ];
+
         $functions['get_template_part'] = [
             'callable' => function ( string $slug, string $name = null, array $args = [] ) {
                 var_dump( [ $slug, $name, $args ] );
                 call_user_func_array( 'get_template_part', [ $slug, $name, $args ] );
             },
         ];
+
         return $functions;
     }
 
