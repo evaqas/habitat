@@ -13,7 +13,7 @@ function asset_path( $path ) {
 function get_asset( $path ) {
     $manifest_path = get_theme_file_path( DIST_PATH . '/manifest.json' );
     $manifest = file_exists( $manifest_path ) ? json_decode( file_get_contents( $manifest_path ), true ) : [];
-    $asset_path = isset( $manifest[ $path ] ) ? $manifest[ $path ] : $path;
+    $asset_path = isset( $manifest[ $path ] ) ? $manifest[ $path ] : trailingslashit( ASSETS_PATH ) . ltrim( $path, '/\\' );
     return get_relative_asset_path( $asset_path );
 }
 
