@@ -11,7 +11,7 @@
             <button x-on:click.stop="toggleOffcanvas">
                 {% embed "partials/sprite.twig" %}
                     {% block sprite %}
-                        <use x-bind:href="hamburgerIcon"></use>
+                        <use href="{{ asset('svg/sprite.svg') }}#hamburger" x-bind:href="hamburgerIcon"></use>
                     {% endblock %}
                 {% endembed %}
             </button>
