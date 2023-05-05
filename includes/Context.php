@@ -40,10 +40,15 @@ class Context
         } );
 
         foreach ( $methods as $method ) {
-            $context_value = $this->{$method->name}();
-            $this->context[ $method->name ] = $context_value;
-            do_action( 'qm/debug', [ $method->name => $context_value ] );
+            $this->addToContext( $method->name, $this->{$method->name}() );
         }
+    }
+
+
+    protected function addToContext( $key, $value )
+    {
+        $this->context[ $key ] = $value;
+        do_action( 'qm/debug', [ $key => $value ] );
     }
 
 
