@@ -11,7 +11,6 @@ class Timber
         add_filter( 'timber/twig/functions', [ $self, 'addTwigFunctions' ] );
         add_filter( 'timber/twig/filters',   [ $self, 'addTwigFilters' ] );
         add_filter( 'timber/context',        [ $self, 'addMenus'] );
-        add_filter( 'timber/context',        [ $self, 'addAcfOptions'] );
     }
 
 
@@ -39,16 +38,6 @@ class Timber
         ];
 
         return $functions;
-    }
-
-
-    public function addAcfOptions( $context )
-    {
-        if ( function_exists('get_fields') ) {
-            $context['options'] = get_fields('option');
-        }
-
-        return $context;
     }
 
 

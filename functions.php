@@ -30,7 +30,7 @@ Theme::init();
 
 
 /**
- * Timber context and configuration
+ * Timber configuration
  */
 Timber::setup();
 
@@ -42,9 +42,15 @@ Filters::init();
 
 
 /**
+ * Add to global Timber context
+ */
+App::init();
+
+
+/**
  * Use template files as controllers
  */
-ControllerService::init();
+// ControllerService::init();
 
 
 /**
