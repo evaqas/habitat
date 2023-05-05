@@ -4,13 +4,19 @@
 
     <h1>{{ page_title }}</h1>
 
-    {% if posts %}
-        {% for post in posts %}
-            {% if not fn('is_singular') %}
+    {% if fn('is_singular') %}
+
+        <div>{{ post.content }}</div>
+
+    {% else %}
+
+        {% if posts %}
+            {% for post in posts %}
                 <h2><a href="{{ post.link | e('esc_url') }}">{{ post.title }}</a></h2>
-            {% endif %}
-            <div>{{ post.content }}</div>
-        {% endfor %}
+                <div>{{ post.content }}</div>
+            {% endfor %}
+        {% endif %}
+
     {% endif %}
 
 {% endblock %}
