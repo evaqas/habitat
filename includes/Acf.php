@@ -17,7 +17,7 @@ class Acf
 
     public function addOptionsPage()
     {
-        acf_add_options_sub_page( array(
+        acf_add_options_sub_page([
             'page_title'      => esc_html__( 'Globalūs Nustatymai', 'habitat' ),
             'menu_title'      => esc_html( get_bloginfo('name') ),
             'menu_slug'       => 'globalus-nustatymai',
@@ -25,7 +25,7 @@ class Acf
             'capability'      => 'manage_options',
             'update_button'   => esc_html__( 'Išsaugoti', 'habitat' ),
             'updated_message' => esc_html__( 'Nustatymų pakeitimai išsaugoti.', 'habitat' ),
-        ) );
+        ]);
     }
 
 
