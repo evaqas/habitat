@@ -1,12 +1,11 @@
-{% for item in links %}
-    {% set link = item.link %}
-    <li class="{{ [ item.class, itemClass ] | classname | e('html_attr') }}">
-        <a class="{{ [ link.class, linkClass ] | classname | e('html_attr') }}" href="{{ link.url | e('esc_url') }}"{{ link.target ? ' target="%s"' | format( link.target | e('html_attr') ) }}><span>{{ link.name }}</span></a>
-        {% include "partials/menu.twig" with {
-            menu: item.children,
-            class: childClass,
-            itemClass: childItemClass,
-            linkClass: childLinkClass,
-        } %}
+{% for item in items %}
+    <li {{ item.atts | map( (val, att) => "#{att}=\"#{val}\"" ) | join(' ') }}>
+        <a {{ item.link_atts | map( (val, att) => "#{att}=\"#{val}\"" ) | join(' ') }}>
+            <span>{{ item.name }}</span>
+            {% if item.has_children %}
+                <span class="expand-toggle" x-on:click.prevent="expanded = ! expanded" x-text="expanded ? '&minus;' : '&plus;'">&plus;</span>
+            {% endif %}
+        </a>
+        {% include "partials/menu.twig" with { menu: item.children, isChild: true } only %}
     </li>
 {% endfor %}

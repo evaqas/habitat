@@ -1,5 +1,5 @@
 {% if menu %}
-    <ul class="{{ class | e('html_attr') }}">
-        {% include 'partials/menu-links.twig' with { links: menu } %}
+    <ul class="{{ class | e('html_attr') }}"{{ isChild ? ' x-show="expanded" x-collapse' }}>
+        {% include 'partials/menu-links.twig' with { items: menu } %}
     </ul>
 {% endif %}

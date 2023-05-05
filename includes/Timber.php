@@ -10,7 +10,13 @@ class Timber
 
         add_filter( 'timber/twig/functions', [ $self, 'addTwigFunctions' ] );
         add_filter( 'timber/twig/filters',   [ $self, 'addTwigFilters' ] );
-        add_filter( 'timber/context',        [ $self, 'addMenus'] );
+        add_filter( 'timber/menuitem/class', [ $self, 'menuItemClass' ], 10, 3 );
+    }
+
+
+    public function menuItemClass( $class, $item, $menu )
+    {
+        return MenuItem::class;
     }
 
 

@@ -8,6 +8,7 @@ class App extends Context
     {
         add_action( 'wp', function () {
             $self = new self();
+            $self->addMenus();
             add_filter( 'timber/context', [ $self, 'mergeContext' ] );
         } );
     }
@@ -32,5 +33,44 @@ class App extends Context
     public function options()
     {
         return function_exists('get_fields') ? get_fields('option') : null;
+    }
+
+
+    protected function addMenus()
+    {
+        $menus = get_registered_nav_menus();
+
+        foreach ( $menus as $menu_slug => $menu_title ) {
+            if ( ! has_nav_menu( $menu_slug ) ) continue;
+            $menu = \Timber::get_menu( $menu_slug );
+            $this->addToContext( str_replace( '-', '_', $menu_slug ), $menu->get_items() );
+        }
+    }
+
+
+    public function lang_menu()
+    {
+        if ( ! function_exists( 'pll_the_languages' ) ) {
+            return null;
+        }
+
+        $langs = pll_the_languages( [ 'raw' => 1 ] );
+
+        return array_map( function ( $lang ) {
+
+            $item = [
+                'name'      => strtoupper( $lang['slug'] ),
+                'link_atts' => [
+                    'href' => $lang['url'],
+                ],
+            ];
+
+            if ( $lang['current_lang'] ) {
+                $item['atts']['class'] = 'is-current';
+            }
+
+            return $item;
+
+        }, array_values( $langs ) );
     }
 }
