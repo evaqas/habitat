@@ -39,8 +39,6 @@ class Context
             return ! in_array( $method->name, $this->methods_to_exclude ) && ! $method->isStatic();
         } );
 
-        $methods = array_reverse( $methods );
-
         foreach ( $methods as $method ) {
             $context_value = $this->{$method->name}();
             $this->context[ $method->name ] = $context_value;
