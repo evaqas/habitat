@@ -24,15 +24,15 @@ require_once get_theme_file_path('includes/functions.php');
 
 
 /**
- * Initialize theme
- */
-Theme::init();
-
-
-/**
  * Timber configuration
  */
 Timber::setup();
+
+
+/**
+ * Initialize theme
+ */
+Theme::init();
 
 
 /**
@@ -48,12 +48,12 @@ App::init();
 
 
 /**
- * Use template files as controllers
- */
-// ControllerService::init();
-
-
-/**
  * Acf filters and configuration
  */
 Acf::init();
+
+
+/**
+ * Initialize WooCommerce configuration
+ */
+WooCommerce::init();

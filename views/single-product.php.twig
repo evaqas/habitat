@@ -1,0 +1,17 @@
+{% extends "layouts/default.twig" %}
+
+{% block page %}
+
+    <div class="container">
+
+        {% do action('woocommerce_before_main_content') %}
+
+        {{ fn( 'wc_get_template_part', 'content', 'single-product' ) }}
+
+        {% do action('woocommerce_after_main_content') %}
+
+        {% do action('woocommerce_sidebar') %}
+
+    </div>
+
+{% endblock %}

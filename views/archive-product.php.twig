@@ -1,0 +1,46 @@
+{% extends "layouts/default.twig" %}
+
+{% block page %}
+
+    <div class="container">
+
+        {% do action('woocommerce_before_main_content') %}
+
+        <header class="woocommerce-products-header">
+            <h1 class="woocommerce-products-header__title page-title">{{ page_title }}</h1>
+            {% do action('woocommerce_archive_description') %}
+        </header>
+
+        {% if posts %}
+
+            {% do action('woocommerce_before_shop_loop') %}
+
+            {{ fn('woocommerce_product_loop_start') }}
+
+            {% if fn( 'wc_get_loop_prop', 'total' ) %}
+
+                {% for post in posts %}
+
+                    {% do action('woocommerce_shop_loop') %}
+
+                    {{ fn( 'wc_get_template_part', 'content', 'product' ) }}
+
+                {% endfor %}
+
+            {% endif %}
+
+            {{ fn('woocommerce_product_loop_end') }}
+
+            {% do action('woocommerce_after_shop_loop') %}
+
+        {% else %}
+            {% do action('woocommerce_no_products_found') %}
+        {% endif %}
+
+        {% do action('woocommerce_after_main_content') %}
+
+        {% do action('woocommerce_sidebar') %}
+
+    </div>
+
+{% endblock %}
