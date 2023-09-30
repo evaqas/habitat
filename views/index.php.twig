@@ -2,21 +2,23 @@
 
 {% block page %}
 
-    <h1>{{ page_title }}</h1>
+    <div class="container">
+        <h1>{{ page_title }}</h1>
 
-    {% if fn('is_singular') %}
+        {% if fn('is_singular') %}
 
-        <div>{{ post.content }}</div>
+            <div>{{ post.content }}</div>
 
-    {% else %}
+        {% else %}
 
-        {% if posts %}
-            {% for post in posts %}
-                <h2><a href="{{ post.link | e('esc_url') }}">{{ post.title }}</a></h2>
-                <div>{{ post.content }}</div>
-            {% endfor %}
+            {% if posts %}
+                {% for post in posts %}
+                    <h2><a href="{{ post.link | e('esc_url') }}">{{ post.title }}</a></h2>
+                    <div>{{ post.content }}</div>
+                {% endfor %}
+            {% endif %}
+
         {% endif %}
-
-    {% endif %}
+    </div>
 
 {% endblock %}
