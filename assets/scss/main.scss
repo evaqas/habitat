@@ -16,6 +16,7 @@ html, body {
 // components
 @tailwind components;
 @import "components.offcanvas";
+@import "components.elementor.typography";
 
 // utilities
 @tailwind utilities;

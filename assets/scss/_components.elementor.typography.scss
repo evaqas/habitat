@@ -1,0 +1,102 @@
+.elementor-widget-text-editor > .elementor-widget-container {
+
+    :where(p) {
+        margin-top: 1.25em;
+        margin-bottom: 1.25em;
+    }
+
+    :where(a) {
+        text-decoration: underline;
+    }
+
+    :where(strong) {
+        font-weight: 600;
+    }
+
+    :where(h1, h2, h3, h4, h5, h6) {
+        color: var(--e-global-color-primary);
+    }
+
+    :where(h1) {
+        font-size: 2.25em;
+        line-height: 1.111;
+        margin-top: 0;
+        margin-bottom: 0.889em;
+    }
+    :where(h2) {
+        font-size: 1.5em;
+        line-height: 1.333;
+        margin-top: 2em;
+        margin-bottom: 1em;
+    }
+    :where(h3) {
+        font-size: 1.25em;
+        line-height: 1.6;
+        margin-top: 1.6em;
+        margin-bottom: 0.6em;
+    }
+    :where(h4) {
+        line-height: 1.5;
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
+    }
+
+    :where(ul, ol) {
+        margin-top: 1.25em;
+        margin-bottom: 1.25em;
+        padding-left: 1.625em;
+    }
+    :where(ul) {
+        list-style-type: disc;
+    }
+    :where(ol) {
+        list-style-type: decimal;
+    }
+    :where(li) {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+    :where(ol > li) {
+        padding-left: 0.375em;
+    }
+    :where(ul > li) {
+        padding-left: 0.375em;
+    }
+    :where(& > ul > li p) {
+        margin-top: 0.75em;
+        margin-bottom: 0.75em;
+    }
+    :where(& > ul > li > *:first-child) {
+        margin-top: 1.25em;
+    }
+    :where(& > ul > li > *:last-child) {
+        margin-bottom: 1.25em;
+    }
+    :where(& > ol > li > *:first-child) {
+        margin-top: 1.25em;
+    }
+    :where(& > ol > li > *:last-child) {
+        margin-bottom: 1.25em;
+    }
+    :where(ul ul, ul ol, ol ul, ol ol) {
+        margin-top: 0.75em;
+        margin-bottom: 0.75em;
+    }
+
+    :where(hr) {
+        margin-top: 3em;
+        margin-bottom: 3em;
+    }
+    :where(hr + *) {
+        margin-top: 0;
+    }
+
+    > :where(:first-child),
+    > :where(style:first-child + *) {
+        margin-top: 0;
+    }
+
+    > :where(:last-child) {
+        margin-bottom: 0;
+    }
+}
