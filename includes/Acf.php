@@ -17,10 +17,12 @@ class Acf
 
     public function addOptionsPage()
     {
+        $site_name = get_bloginfo('name');
+
         acf_add_options_sub_page([
-            'page_title'      => esc_html__( 'Globalūs Nustatymai', 'habitat' ),
-            'menu_title'      => esc_html( get_bloginfo('name') ),
-            'menu_slug'       => 'globalus-nustatymai',
+            'page_title'      => esc_html( sprintf( __( '%s Nustatymai', 'habitat' ), $site_name ) ),
+            'menu_title'      => esc_html( $site_name ),
+            'menu_slug'       => sprintf( '%s-nustatymai', sanitize_title( $site_name ) ),
             'parent_slug'     => 'options-general.php',
             'capability'      => 'manage_options',
             'update_button'   => esc_html__( 'Išsaugoti', 'habitat' ),
