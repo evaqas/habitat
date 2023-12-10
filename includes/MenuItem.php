@@ -13,15 +13,17 @@ class MenuItem extends \Timber\MenuItem
         $this->classes = [];
         $this->update_class();
 
-        $item = $this->wp_object;
+        $custom_classes = array_filter( (array) get_post_meta( $this->ID, '_menu_item_classes', true ) );
 
-        // add custom class, which is always a first value
-        if ( ! empty( $item->classes[0] ) ) $this->add_class( $item->classes[0] );
-        if ( $this->is_current() )          $this->add_class('is-current');
-        if ( $this->is_parent() )           $this->add_class('is-parent');
-        if ( $this->is_ancestor() )         $this->add_class('is-ancestor');
-        if ( $this->has_children() )        $this->add_class('has-children');
-        if ( $this->is_expanded() )         $this->add_class('is-expanded');
+        foreach ( $custom_classes as $class ) {
+            $this->add_class( $class );
+        }
+
+        if ( $this->is_current() )   $this->add_class('is-current');
+        if ( $this->is_parent() )    $this->add_class('is-parent');
+        if ( $this->is_ancestor() )  $this->add_class('is-ancestor');
+        if ( $this->has_children() ) $this->add_class('has-children');
+        if ( $this->is_expanded() )  $this->add_class('is-expanded');
     }
 
 
@@ -60,6 +62,10 @@ class MenuItem extends \Timber\MenuItem
 
         if ( $this->is_target_blank() ) {
             $atts['target'] = '_blank';
+        }
+
+        if ( ! empty( $this->attr_title ) ) {
+            $atts['title'] = esc_attr( $this->attr_title );
         }
 
         return $atts;
