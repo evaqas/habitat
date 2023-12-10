@@ -25,7 +25,7 @@ class WooCommerce
 
     public function disableSelect2()
     {
-        if ( class_exists('woocommerce') || is_cart() || is_checkout() || is_account_page() ) {
+        if ( class_exists('woocommerce') && ( \is_cart() || \is_checkout() || \is_account_page() ) ) {
             wp_dequeue_style('select2');
             wp_dequeue_script('selectWoo');
         }
